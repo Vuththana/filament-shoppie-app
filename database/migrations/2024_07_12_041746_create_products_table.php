@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('product_name');
-            $table->text('description');
+            $table->text('product_description');
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('sub_category_id')->constrained()->cascadeOnDelete();
             $table->string('image')->nullable();
+            $table->integer('stock');
             $table->decimal('bought_in', 8, 2);
             $table->decimal('price', 8, 2);
             $table->integer('quantity_sold')->default(0);
