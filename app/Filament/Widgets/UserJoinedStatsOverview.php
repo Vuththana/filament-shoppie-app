@@ -9,7 +9,7 @@ use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 use Spatie\Permission\Models\Role;
 
-class TotalProductStatsOverview extends ChartWidget
+class UserJoinedStatsOverview extends ChartWidget
 {
     protected static ?string $heading = 'User Joined';
 

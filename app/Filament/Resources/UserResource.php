@@ -8,12 +8,16 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,14 +29,20 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'User Roles & Permission';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Card::make([
-                    Forms\Components\TextInput::make('name')
+                FileUpload::make('avatar_url')
+                        ->preserveFilenames()
+                        ->directory('avatars')
+                        ->visibility('public')
+                        ->image()
+                        ->imageEditor(), 
+                Forms\Components\TextInput::make('name')
                     ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
@@ -59,6 +69,10 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('avatar_url')
+                ->label('Profile Picture')
+                ->circular()
+                ->size(90),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')

@@ -13,7 +13,7 @@ class ProductStatsOverview extends BaseWidget
         $products = Product::all();
 
         $revenue = $products->sum(function($product) {
-            return $product->price * $product->quantity_sold;
+            return ($product->price * $product->quantity_sold) - ($product->bought_in * $product->quantity_sold);
         });
         
         $totalProduct = $products->sum(function($product) { 

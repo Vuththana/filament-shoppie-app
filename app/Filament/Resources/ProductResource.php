@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductResource\RelationManagers\SubCategoriesRelationManager;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Filament\Resources\ProductResource\RelationManagers\ReviewsRelationManager;
 use App\Models\Product;
 use Faker\Provider\ar_EG\Text;
 use Filament\Forms;
@@ -69,12 +70,21 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
+                TextColumn::make('id')
+                    ->label('ID'),
                 SpatieMediaLibraryImageColumn::make('image'),
                 TextColumn::make('product_name'),
                 TextColumn::make('product_description')->limit(20),
                 TextColumn::make('category.category_name'),
                 TextColumn::make('sub_category.sub_category_name'),
+                TextColumn::make('price')
+                    ->label('Selling')
+                    ->prefix('$'),
+                TextColumn::make('bought_in')
+                    ->label('Bought in')
+                    ->prefix('$'),
+                TextColumn::make('created_at')
+                    ->dateTime('d-M-y'),
             ])
             ->filters([
                 //
@@ -92,7 +102,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            
+            ReviewsRelationManager::class,
         ];
     }
 

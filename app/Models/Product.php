@@ -38,4 +38,7 @@ class Product extends Model implements HasMedia
     public function sub_categories(){
         return $this->hasMany(SubCategory::class);
     }
+    public function reviews(){
+        return $this->hasMany(Review::class);
+    }
 }
