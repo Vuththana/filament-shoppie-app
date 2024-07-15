@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Filament\Resources\CategoryResource\RelationManagers\ProductsRelationManager;
+use App\Filament\Resources\CategoryResource\RelationManagers\SubCategoriesRelationManager;
 use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
@@ -25,7 +26,7 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Product Management System';
-
+    protected static ?int $navigationSort = 1;
     public static function form(Form $form): Form
     {
         return $form
@@ -78,7 +79,7 @@ class CategoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            ProductsRelationManager::class
+            SubCategoriesRelationManager::class,
         ];
     }
 

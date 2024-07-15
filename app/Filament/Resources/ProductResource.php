@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\RelationManagers\ProductsRelationManager;
+use App\Filament\Resources\ProductResource\RelationManagers\SubCategoriesRelationManager;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
@@ -20,6 +20,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 
 class ProductResource extends Resource
 {
@@ -27,6 +29,7 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
     protected static ?string $navigationGroup = 'Product Management System';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -39,7 +42,7 @@ class ProductResource extends Resource
                         ->relationship('category','category_name'),
                     Select::make('sub_category_id')
                         ->relationship('sub_category','sub_category_name'),
-                    FileUpload::make('image')
+                    SpatieMediaLibraryFileUpload::make('image')
                         ->dehydrated()
                         ->directory('product-images')
                         ->visibility('public')
@@ -67,7 +70,7 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id'),
-                ImageColumn::make('image'),
+                SpatieMediaLibraryImageColumn::make('image'),
                 TextColumn::make('product_name'),
                 TextColumn::make('product_description')->limit(20),
                 TextColumn::make('category.category_name'),

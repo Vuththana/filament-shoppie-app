@@ -11,15 +11,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ProductsRelationManager extends RelationManager
+class SubCategoriesRelationManager extends RelationManager
 {
-    protected static string $relationship = 'products';
+    protected static string $relationship = 'sub_categories';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('product_name')
+                Forms\Components\TextInput::make('sub_category_name')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -28,11 +28,12 @@ class ProductsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('product_name')
+            ->recordTitleAttribute('sub_category_name')
             ->columns([
-                Tables\Columns\TextColumn::make('product_name')
-                    ->label('Product'),
-                TextColumn::make('sub_category.sub_category_name')
+                TextColumn::make('id')
+                    ->label('ID'),
+                TextColumn::make('sub_category_name')->sortable()->searchable()
+                    ->label('Sub Category name'),
             ])
             ->filters([
                 //
