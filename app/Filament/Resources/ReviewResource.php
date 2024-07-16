@@ -26,7 +26,7 @@ class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-star';
+    protected static ?string $navigationIcon = 'heroicon-o-star';
     protected static ?string $navigationGroup = 'Product Management System';
     protected static ?int $navigationSort = 4;
 
@@ -61,6 +61,8 @@ class ReviewResource extends Resource
                 TextColumn::make('product.product_name')
                     ->label('Product name'),
                 RatingColumn::make('rating'),
+                TextColumn::make('created_at')
+                    ->dateTime('d-M-y'),
             ])  
             ->filters([
                 //

@@ -6,11 +6,13 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\Pages\CreateUser;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Resources\Pages\CreateRecord;
@@ -48,12 +50,30 @@ class UserResource extends Resource
                     ->email()
                     ->required(),
                 Forms\Components\DateTimePicker::make('email_verified_at'),
+                TextInput::make('current_password')
+                    ->label(__('Current password'))
+                    ->password()
+                    ->revealable(true)
+                        ->rules([
+                            function () {
+                                return function (string $attribute, $value, Closure $fail) {
+                                    if (! Hash::check($value, auth()->user()->password)) {
+                                        $fail('Current password is incorrect.');
+                                    }
+                                };
+                            },
+                        ]),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->dehydrateStateUsing(fn($state) => Hash::make($state))
                     ->dehydrated(fn($state) => filled($state))
+                    ->confirmed()
+                    ->revealable(true)
                     ->required(fn(Page $livewire) => ($livewire instanceof CreateUser))
                     ->maxLength(255),
+                TextInput::make('password_confirmation')
+                    ->password()
+                    ->revealable(true),
                 Select::make('permissions')
                     ->multiple()
                     ->relationship('permissions', 'name')->preload(),
@@ -69,13 +89,16 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label('ID'),
                 ImageColumn::make('avatar_url')
-                ->label('Profile Picture')
+                ->label('Avatar')
                 ->circular()
                 ->size(90),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->copyable()
                     ->searchable(),
                 TextColumn::make('roles.name'),
                 Tables\Columns\TextColumn::make('created_at')

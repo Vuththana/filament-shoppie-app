@@ -6,7 +6,20 @@ export default {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+
+    },
+    fontFamily: {
+      Roboto: ["Roboto", "san-serif"],
+    },
+    container: {
+      padding: "2rem",
+      center: true
+    },
+    screens: {
+      sm: "640px",
+      md: "768px"
+    }
   },
   plugins: [],
 }

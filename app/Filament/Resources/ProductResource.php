@@ -43,8 +43,8 @@ class ProductResource extends Resource
                         ->relationship('category','category_name'),
                     Select::make('sub_category_id')
                         ->relationship('sub_category','sub_category_name'),
-                    SpatieMediaLibraryFileUpload::make('image')
-                        ->dehydrated()
+                    FileUpload::make('image')
+                        ->preserveFilenames()
                         ->directory('product-images')
                         ->visibility('public')
                         ->image()
@@ -72,7 +72,7 @@ class ProductResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->label('ID'),
-                SpatieMediaLibraryImageColumn::make('image'),
+                ImageColumn::make('image'),
                 TextColumn::make('product_name'),
                 TextColumn::make('product_description')->limit(20),
                 TextColumn::make('category.category_name'),

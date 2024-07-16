@@ -39,6 +39,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         ];
     }
 
+    public function getUser($id){
+        return self::find($id);
+    }
+
     // Implement the canAccessPanel method required by the FilamentUser interface
     public function canAccessPanel(Panel $panel): bool
     {
