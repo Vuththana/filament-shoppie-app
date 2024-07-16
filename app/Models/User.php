@@ -9,14 +9,15 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Traits\HasRoles;
 use Filament\Models\Contracts\HasAvatar;
+use Illuminate\Auth\Passwords\CanResetPassword as PasswordsCanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-
-class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia, CanResetPassword
 {
-    use HasFactory, Notifiable, HasRoles, InteractsWithMedia;
+    use HasFactory, Notifiable, HasRoles, InteractsWithMedia, PasswordsCanResetPassword;
 
     protected $fillable = [
         'name',
