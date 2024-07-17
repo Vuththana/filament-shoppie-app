@@ -14,10 +14,12 @@ use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Laravel\Cashier\Billable;
+use Laravel\Cashier\Cashier;
 
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia, CanResetPassword
 {
-    use HasFactory, Notifiable, HasRoles, InteractsWithMedia, PasswordsCanResetPassword;
+    use HasFactory, Notifiable, HasRoles, InteractsWithMedia, PasswordsCanResetPassword, Billable;
 
     protected $fillable = [
         'name',

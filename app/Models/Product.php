@@ -24,6 +24,11 @@ class Product extends Model implements HasMedia
         'status',        
     ];
 
+    static public function getSingle($id)
+    {
+        return self::find($id);
+    }
+
     public function category(){
         return $this->belongsTo(Category::class);
     }

@@ -21,11 +21,16 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@example.com',
         ]);
-        User::factory()->create([
+
+        $user2 = User::factory()->create([
             'name' => 'test',
             'email' => 'test@example.com',
         ]);
+
         $role = Role::create(['name' => 'Admin']);
+        $customer = Role::create(['name' => 'Customer']);
+
         $user1->assignRole($role);
+        $user2->assignRole($customer);
     }
 }
