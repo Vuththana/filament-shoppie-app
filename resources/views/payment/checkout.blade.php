@@ -8,7 +8,7 @@
             <div class="col text-white ml-3">
                 <div class="min-h-[34px]">
                     <div class="col text-xl">
-                        <p>Please complete the payment for your order</p>
+                        <p>Please complete the payment for your order {{$getOrder->order_number}}</p>
                     </div>
                         Order will be cancelled automatically if no payment is made within 1 hour 50 minutes.
                 </div>

@@ -2,22 +2,18 @@
  
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
- 
+
 class StripeController extends Controller
 {
-    public function checkout($id)
+    public function checkout( $id)
     {
-        $data['getRecord'] = Product::getSingle($id);
-        if(!empty($data['getRecord']))
-        {
-            return view('payment.checkout', $data);
-        }
-        else
-        {
-            abort(404);
-        }
+        $getProduct['getRecord'] = Product::getSingle($id);
+        
+        return view('payment.checkout', $getProduct);
     }
 
  
@@ -31,6 +27,7 @@ class StripeController extends Controller
         $total = $request->input('total');
 
         $session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
             'line_items'  => [
                 [
                     'price_data' => [
