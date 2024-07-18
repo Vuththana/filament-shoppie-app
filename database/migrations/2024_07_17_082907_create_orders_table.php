@@ -18,7 +18,7 @@ return new class extends Migration
             $table->dateTime('order_date');
             $table->decimal('total_amount', 10, 2);
             $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
-            $table->string('payment_method');
+            $table->enum('payment_method',['khqr', 'credit_card']);
             $table->timestamps();
         });
     }

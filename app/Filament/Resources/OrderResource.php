@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Status;
+use App\Enums\PmMethod;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
@@ -46,13 +47,20 @@ class OrderResource extends Resource
                     ->default(auth()->user()->name)
                     ->readOnly(),
                 ToggleButtons::make('status')
-                ->options(Status::class)
-                ->default(Status::PENDING)
-                ->inline()
-                ->required(),
+                    ->options(Status::class)
+                    ->default(Status::PENDING)
+                    ->inline()
+                    ->required(),
                 TextInput::make('order_date')
                     ->default(date(now()))
                     ->readOnly(),
+                TextInput::make('total_amount')
+                    ->numeric()
+                    ->required(),
+                ToggleButtons::make('payment_method')
+                    ->options(PmMethod::class)
+                    ->inline()
+                    ->required(),
             ]);
 
     }

@@ -37,31 +37,41 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 Card::make([
-                    TextInput::make('product_name'),
-                    TextInput::make('product_description'),
+                    TextInput::make('product_name')
+                        ->required(),
+                    TextInput::make('product_description')
+                        ->required(),
                     Select::make('category_id')
-                        ->relationship('category','category_name'),
+                        ->relationship('category','category_name')
+                        ->required(),
                     Select::make('sub_category_id')
-                        ->relationship('sub_category','sub_category_name'),
+                        ->relationship('sub_category','sub_category_name')
+                        ->required(),
                     FileUpload::make('image')
                         ->preserveFilenames()
                         ->directory('product-images')
                         ->visibility('public')
                         ->image()
                         ->imageEditor(),    
-                    TextInput::make('stock')->integer(),
+                    TextInput::make('stock')
+                        ->integer()
+                        ->required(),
                     TextInput::make('bought_in')
-                        ->label('Bought In Price'),
+                        ->label('Bought In Price')
+                        ->required(),
                     TextInput::make('price')
                         ->label('Selling Price')
                         ->numeric()
-                        ->inputMode('decimal'),
-                    TextInput::make('stock_threshold'),
+                        ->inputMode('decimal')
+                        ->required(),
+                    TextInput::make('stock_threshold')
+                        ->required(),
                     Select::make('status')
                         ->options([
                             true => 'Active',
                             false => 'Inactive',
-                        ]),
+                        ])
+                        ->default(true),
                 ])->columns(2)
             ]);
     }
