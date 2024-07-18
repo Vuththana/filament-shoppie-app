@@ -16,6 +16,9 @@ use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SelectColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -36,25 +39,28 @@ class OrderResource extends Resource
             ->schema([
                 TextInput::make('order_number')
                     ->label('Order no.')
-                    ->default('OR' .random_int(10000, 99999))
-                    ->disabled(),
+                    ->default('OR'.random_int(10000, 99999))
+                    ->readOnly(),
                 TextInput::make('user_id')
                     ->label('Customer')
                     ->default(auth()->user()->name)
-                    ->disabled(),
+                    ->readOnly(),
                 ToggleButtons::make('status')
                 ->options(Status::class)
                 ->default(Status::PENDING)
                 ->inline()
                 ->required(),
+                TextInput::make('order_date')
+                    ->dateTime(now)
             ]);
+
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('order_status')
             ])
             ->filters([
                 //

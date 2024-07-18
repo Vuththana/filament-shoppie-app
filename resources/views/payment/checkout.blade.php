@@ -8,7 +8,7 @@
             <div class="col text-white ml-3">
                 <div class="min-h-[34px]">
                     <div class="col text-xl">
-                        <p>Please complete the payment for your order {{$getOrder->order_number}}</p>
+                        <p>Please complete the payment for your order</p>
                     </div>
                         Order will be cancelled automatically if no payment is made within 1 hour 50 minutes.
                 </div>
@@ -72,22 +72,39 @@
             </div>
         </div>
     </div>
-    <div class="btn-checkout-wrapper mt-[10px] flex justify-end">
-        <form action="{{ route('checkout.session', ['id' => $getRecord->id]) }}" method="POST">
-            <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <input type='hidden' name="total" value="{{$getRecord->price*100}}">
-            <input type='hidden' name="product_name" value="{{$getRecord->product_name}}">
-            <button class="border bg-red-500 text-white rounded-lg p-1" type="submit" id="checkout-live-button"><span class="text-xl mx-2">Pay Now</span></button>
-        </form>
+    <div class="flex gap-4 justify-end">
+        <div class="pm-method border mt-[10px]">
+            <div class="fee">
+
+            </div>
+            <ul class="cc-pm">
+                <li class="flex gap-2">
+                    <input type="radio" name="pmlist">
+                    <div>
+                        Credit & Card
+                    </div>
+                </li>
+            </ul>
+            <ul class="ew-pm">
+                <li class="flex gap-2">
+                    <input type="radio" name="pmlist">
+                    <div>
+                        E-Wallet
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="btn-checkout-wrapper mt-[10px] justify-end border">
+            <form action="{{ route('checkout.session', ['id' => $getRecord->id]) }}" method="POST">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <input type='hidden' name="total" value="{{$getRecord->price*100}}">
+                <input type='hidden' name="product_name" value="{{$getRecord->product_name}}">
+                <button class="border bg-red-500 text-white rounded-lg p-1" type="submit" id="checkout-live-button"><span class="text-xl mx-2">Pay Now</span></button>
+            </form>
+        </div>
+        </div>
     </div>
-    <div class="subtotal-area p-[20px] min-h-[400px]">
-        <table>
-            <tr>
-                <td>Handling fees</td>
-                <td>0.44 USD</td>
-            </tr>
-        </table>
-    </div>
+
 </div>
 
 @endsection

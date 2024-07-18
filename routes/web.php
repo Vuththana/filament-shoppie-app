@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'card']);
 
+Route::get('/test', function() {
+    return view('filament.pages.test');
+});
+
 Route::get('login', [AuthController::class, 'loginForm'])->name('login');
 Route::get('register', [AuthController::class, 'registerForm'])->name('register');
 
