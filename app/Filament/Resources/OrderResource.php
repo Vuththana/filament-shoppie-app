@@ -9,6 +9,7 @@ use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
@@ -17,12 +18,14 @@ use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\HtmlString;
 
 use function Laravel\Prompts\select;
 
@@ -40,12 +43,16 @@ class OrderResource extends Resource
             ->schema([
                 TextInput::make('order_number')
                     ->label('Order no.')
-                    ->default('OR'.random_int(10000, 99999))
-                    ->readOnly(),
-                TextInput::make('user_id')
+                    ->default('OR-'.random_int(100000, 999999))
+                    ->readOnly()
+                    ->dehydrated()
+                    ->unique(Order::class, 'order_number', ignoreRecord: true),
+                Select::make('user_id')
                     ->label('Customer')
-                    ->default(auth()->user()->name)
-                    ->readOnly(),
+                    ->relationship('user', 'name'),
+                Select::make('product_id')
+                    ->relationship('product', 'product_name')
+                    ->required(),
                 ToggleButtons::make('status')
                     ->options(Status::class)
                     ->default(Status::PENDING)
@@ -69,7 +76,33 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('order_status')
+                TextColumn::make('id')
+                    ->label('ID'),
+                TextColumn::make('order_number')
+                    ->label('Order no.'),
+                TextColumn::make('product.product_name')
+                    ->limit(20),
+                TextColumn::make('user.name'),
+                TextColumn::make('status')
+                ->badge()
+                ->color(function (string $state): string {
+                    return match ($state){
+                        'pending' => 'info',
+                        'processing' => 'warning',
+                        'completed' => 'success',
+                        'cancelled' => 'danger',
+                    };
+                })
+                ->icon(function (string $state): string {
+                    return match ($state){
+                        'pending' => 'heroicon-s-exclamation-circle',
+                        'processing' => 'heroicon-c-arrow-path',
+                        'completed' => 'heroicon-c-check-badge',
+                        'cancelled' => 'heroicon-m-x-circle',
+                    };
+                }),
+                TextColumn::make('order_date')
+                    ->dateTime('d-M-y'),
             ])
             ->filters([
                 //

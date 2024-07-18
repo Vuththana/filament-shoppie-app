@@ -65,6 +65,7 @@ class ProductResource extends Resource
                         ->inputMode('decimal')
                         ->required(),
                     TextInput::make('stock_threshold')
+                        ->helperText('Number of stock threshold that is going to get alerted when is almost out of stock')
                         ->required(),
                     Select::make('status')
                         ->options([
