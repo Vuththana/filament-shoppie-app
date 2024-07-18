@@ -51,7 +51,7 @@ class OrderResource extends Resource
                 ->inline()
                 ->required(),
                 TextInput::make('order_date')
-                    ->dateTime(now)
+                    ->dateTime(now())
             ]);
 
     }
