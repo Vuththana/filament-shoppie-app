@@ -64,21 +64,19 @@
                 </li>
             </ul>
         </div>
-        <div class="btn-checkout-wrapper mt-[10px] justify-end ">
+        <div class="btn-checkout-wrapper mt-[10px] justify-end">
             <form action="{{ route('checkout.session', ['id' => $getRecord->id]) }}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type='hidden' name="total" value="{{ $getRecord->price * 100 }}">
-                <input type='hidden' name="product_name" value="{{ $getRecord->product_name }}">
-                <input type='hidden' name="product_id" value="{{ $getRecord->id }}">
-                <div class="mb-4">
-                    <label for="buyer_name" class="block text-gray-700 text-sm font-bold mb-2">Buyer Name:</label>
-                    <input type="text" name="buyer_name" id="buyer_name" placeholder="Enter your name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                </div>
+                <input type="hidden" name="total" value="{{ $getRecord->price * 100 }}">
+                <input type="hidden" name="product_name" value="{{ $getRecord->product_name }}">
+                <input type="hidden" name="product_id" value="{{ $getRecord->id }}">
                 <button class="border bg-red-500 text-white rounded-lg p-1 mt-2" type="submit" id="checkout-live-button">
                     <span class="text-xl mx-2">Pay Now</span>
                 </button>
             </form>
         </div>
+        
+        
     </div>
 </div>
 @endsection

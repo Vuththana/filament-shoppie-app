@@ -17,66 +17,68 @@ class StripeController extends Controller
     }
 
     public function session(Request $request, $id)
-    {
-        \Stripe\Stripe::setApiKey(config('stripe.sk'));
+{
+    \Stripe\Stripe::setApiKey(config('stripe.sk'));
 
-        $product = Product::findOrFail($id);
+    $product = Product::findOrFail($id);
 
-        $productName = $request->input('product_name');
-        $total = $request->input('total');
-        $buyerName = $request->input('buyer_name');
-        $productId = $request->input('product_id');
+    $productName = $request->input('product_name');
+    $total = $request->input('total');
+    $productId = $request->input('product_id');
 
-        $session = \Stripe\Checkout\Session::create([
-            'payment_method_types' => ['card'],
-            'line_items'  => [
-                [
-                    'price_data' => [
-                        'currency'     => 'USD',
-                        'product_data' => [
-                            "name" => $productName,
-                        ],
-                        'unit_amount'  => $total,
+    
+    $buyerName = auth()->user()->name;
+
+    $session = \Stripe\Checkout\Session::create([
+        'payment_method_types' => ['card'],
+        'line_items'  => [
+            [
+                'price_data' => [
+                    'currency'     => 'USD',
+                    'product_data' => [
+                        "name" => $productName,
                     ],
-                    'quantity'   => 1,
+                    'unit_amount'  => $total,
                 ],
-
+                'quantity'   => 1,
             ],
-            'mode'        => 'payment',
-            'success_url' => route('success', ['id' => $id, 'buyer_name' => $buyerName, 'product_id' => $productId]),
-            'cancel_url'  => route('checkout', ['id' => $id]),
-        ]);
+        ],
+        'mode'        => 'payment',
+        'success_url' => route('success', ['id' => $id, 'buyer_name' => $buyerName, 'product_id' => $productId]),
+        'cancel_url'  => route('checkout', ['id' => $id]),
+    ]);
 
-        return redirect()->away($session->url);
+    return redirect()->away($session->url);
+}
+
+
+public function success(Request $request, $id)
+{
+    $paymentStatus = 'Paid';
+    $paymentMethod = 'Stripe';
+
+    $buyerName = $request->query('buyer_name');
+    $productId = $request->query('product_id');
+
+    if (!$buyerName) {
+        return redirect()->route('checkout', ['id' => $id])->withErrors('Buyer name is missing.');
     }
 
+    $product = Product::findOrFail($productId);
 
-    public function success(Request $request, $id)
-    {
-        $paymentStatus = 'Paid';
-        $paymentMethod = 'Stripe';
+    $orderDetail = OrderDetail::create([
+        'buyer_name' => $buyerName,
+        'order_date' => now()->format('Y-m-d'),
+        'payment_status' => $paymentStatus,
+        'payment_method' => $paymentMethod,
+        'order_number' => strtoupper(uniqid('ORD-')),
+    ]);
 
-        $buyerName = $request->query('buyer_name');
-        $productId = $request->query('product_id');
+    $this->sendDiscordNotification($orderDetail, $product);
 
-        if (!$buyerName) {
-            return redirect()->route('checkout', ['id' => $id])->withErrors('Buyer name is missing.');
-        }
+    return redirect('notifications');
+}
 
-        $product = Product::findOrFail($productId);
-
-        $orderDetail = OrderDetail::create([
-            'buyer_name' => $buyerName,
-            'order_date' => now()->format('Y-m-d'),
-            'payment_status' => $paymentStatus,
-            'payment_method' => $paymentMethod,
-            'order_number' => strtoupper(uniqid('ORD-')),   
-        ]);
-
-        $this->sendDiscordNotification($orderDetail, $product);
-
-        return redirect('notifications');
-    }
 
 
     protected function sendDiscordNotification(OrderDetail $orderDetail, Product $product)

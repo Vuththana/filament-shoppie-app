@@ -24,5 +24,6 @@ Route::group(['middleware' => ['auth', 'role:Customer']], function () {
     Route::get('/success', [StripeController::class, 'success'])->name('success');
 });
 
+
 Route::get('notification', [DiscordNotificationController::class, 'sendNotification']);
 Route::get('success/{id}', [StripeController::class, 'success'])->name('success');
