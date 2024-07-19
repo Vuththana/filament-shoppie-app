@@ -10,101 +10,75 @@
                     <div class="col text-xl">
                         <p>Please complete the payment for your order</p>
                     </div>
-                        Order will be cancelled automatically if no payment is made within 1 hour 50 minutes.
+                    Order will be cancelled automatically if no payment is made within 1 hour 50 minutes.
                 </div>
             </div>
-
         </div>
     </div>
 
     <div class="border rounded-lg mt-[10px]">
         <div class="grid grid-cols-3 gap-4 p-[16px] text-sm text-gray-500">
-            <div class="text-left">
-                Item
-            </div>
-            <div class="text-center">
-                Quantity
-            </div>
-            <div class="text-right">
-                Amount
-            </div>
+            <div class="text-left">Item</div>
+            <div class="text-center">Quantity</div>
+            <div class="text-right">Amount</div>
         </div>
         <div class="grid grid-cols-3 gap-4 p-[16px] my-[16px]">
             <div class="text-left text-sm font-semibold">
                 {{$getRecord->product_name}}
             </div>
-            <div class="text-center">
-                1
-            </div>
+            <div class="text-center">1</div>
             <div class="text-right">
-                {{$getRecord->price}}
-                <span class="text-[0.7em]">USD</span>
+                {{$getRecord->price}} <span class="text-[0.7em]">USD</span>
             </div>  
         </div>
-        <div class="border-t mx-auto">
-            <!---->
-        </div>
+        <div class="border-t mx-auto"></div>
         <div class="grid grid-cols-3 gap-4 p-[16px] my-[16px]">
-        <div class="text-left">
-                <!---->
-            </div>
-            <div class="text-center font-semibold">
-                Order Amount
-            </div>
+            <div class="text-left"></div>
+            <div class="text-center font-semibold">Order Amount</div>
             <div class="text-right">
-                {{$getRecord->price}}
-                <span class="text-[0.7em]">USD</span>
+                {{$getRecord->price}} <span class="text-[0.7em]">USD</span>
             </div>
         </div>
-        <div class="border-t mx-auto max-w-[90%]">
-            <!---->
-        </div>
+        <div class="border-t mx-auto max-w-[90%]"></div>
         <div class="grid grid-cols-3 gap-4 p-[16px] my-[16px]">
-        <div class="text-left">
-                <!---->
-            </div>
-            <div class="text-center font-semibold">
-                Total Amount
-            </div>
+            <div class="text-left"></div>
+            <div class="text-center font-semibold">Total Amount</div>
             <div class="text-right">
-                {{$getRecord->price}}
-                <span class="text-[0.7em]">USD</span>
+                {{$getRecord->price}} <span class="text-[0.7em]">USD</span>
             </div>
         </div>
     </div>
     <div class="flex gap-4 justify-end">
-        <div class="pm-method border mt-[10px]">
-            <div class="fee">
-
-            </div>
+        <div class="pm-method  mt-[10px]">
+            <div class="fee"></div>
             <ul class="cc-pm">
                 <li class="flex gap-2">
                     <input type="radio" name="pmlist">
-                    <div>
-                        Credit & Card
-                    </div>
+                    <div>Credit & Card</div>
                 </li>
             </ul>
             <ul class="ew-pm">
                 <li class="flex gap-2">
                     <input type="radio" name="pmlist">
-                    <div>
-                        E-Wallet
-                    </div>
+                    <div>E-Wallet</div>
                 </li>
             </ul>
         </div>
-        <div class="btn-checkout-wrapper mt-[10px] justify-end border">
+        <div class="btn-checkout-wrapper mt-[10px] justify-end ">
             <form action="{{ route('checkout.session', ['id' => $getRecord->id]) }}" method="POST">
-                <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <input type='hidden' name="total" value="{{$getRecord->price*100}}">
-                <input type='hidden' name="product_name" value="{{$getRecord->product_name}}">
-                <button class="border bg-red-500 text-white rounded-lg p-1" type="submit" id="checkout-live-button"><span class="text-xl mx-2">Pay Now</span></button>
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type='hidden' name="total" value="{{ $getRecord->price * 100 }}">
+                <input type='hidden' name="product_name" value="{{ $getRecord->product_name }}">
+                <input type='hidden' name="product_id" value="{{ $getRecord->id }}">
+                <div class="mb-4">
+                    <label for="buyer_name" class="block text-gray-700 text-sm font-bold mb-2">Buyer Name:</label>
+                    <input type="text" name="buyer_name" id="buyer_name" placeholder="Enter your name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <button class="border bg-red-500 text-white rounded-lg p-1 mt-2" type="submit" id="checkout-live-button">
+                    <span class="text-xl mx-2">Pay Now</span>
+                </button>
             </form>
         </div>
-        </div>
     </div>
-
 </div>
-
 @endsection
